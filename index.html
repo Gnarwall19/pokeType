@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PokeType</title>
+    <!-- jQuery JS 3.1.0 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <!-- Bootstrap JS 3.3.7 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap CSS 3.3.7 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+
+<div class="container-fluid">
+    <form>
+        <label for="move-input">Find a Move!</label>
+        <input type="text" id="move-input">
+        <input type="submit" id="search-btn" value="GO!">
+    </form>
+
+    <div id="output">
+
+
+    </div>
+</div>
+
+<body>
+
+
+    <script type="text/javascript">
+        var queryUrl = "https://pokeapi.co/api/v2/move/";
+
+        // Main search function
+        function searchMoves() {
+            var pokeMove = $("#move-input").val().trim()
+            var searchUrl = queryUrl + pokeMove;
+
+            $.ajax({
+                url: searchUrl,
+                method: "GET"
+            }).done(function (res) {
+                console.log(res); //res.type.name
+
+                $("#output").empty();
+
+                // TYPE
+                var type = $("<div>");
+                type.addClass("type");
+                type.text("Type: " + res.type.name);
+
+                // ACCURACY
+                var accuracy = $("<div>");
+                accuracy.addClass("accuracy");
+                accuracy.text("Accuracy: " + res.accuracy);
+
+                // POWER
+                var power = $("<div>");
+                power.addClass("power");
+                power.text("Power: " + res.power);
+
+                // PP
+                var pp = $("<div>");
+                pp.addClass("pp");
+                pp.text("PP: " + res.pp);
+
+                var flavor = $("<div>");
+                flavor.addClass("flavor");
+                flavor.text(res.flavor_text_entries[11].flavor_text);
+
+                $("#output").append(type);
+                $("#output").append(accuracy);
+                $("#output").append(power);
+                $("#output").append(pp);
+                $("#output").append(flavor);
+
+            })
+        }
+
+        // onClick event
+        $("#search-btn").on("click", function (event) {
+            event.preventDefault();
+            searchMoves();
+        });
+    </script>
+</body>
+
+</html>
